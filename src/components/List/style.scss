@@ -3,14 +3,27 @@
     margin:20px 0px;
 }
 .listHeader h2{
-    font-size: 20px;
+    font-size: 25px;
 }
 .listSettings{
     font-size: 25px;
 }
 .taskText{
     font-size:20px;
-    vertical-align: text-top;
+    display: inline-block;
+    vertical-align: super;
+    span{
+        position: absolute;;
+        right:10px;
+        top:23px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+}
+.taskList{
+    li{
+        position: relative;
+    }
 }
 .unfinishTaskBtn{
     background-color: #fff;
@@ -35,4 +48,8 @@
 }
 .removeList{
     cursor: pointer;
+    font-size:25px;
+}
+.removeTask{
+    text-align: right;
 }

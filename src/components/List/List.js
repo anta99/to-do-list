@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import {addTask,changeTask,removeList} from "../../actions/index";
 import bootstrap from 'bootstrap'
-import {BsPen,BsTrashFill,BsCheck} from "react-icons/bs";
+import {BsTrashFill,BsCheck,BsExclamationCircle} from "react-icons/bs";
 import {useSelector,useDispatch} from "react-redux";
 import "./style.css";
 
@@ -28,14 +28,12 @@ export default function List({listObj}){
         }
         //console.log(taskObj);
         dispatch(addTask(taskObj));
-        document.querySelector(".closeModalBtn").click();
+        document.querySelector(`#taskName${listObj.id}`).value="";
+        document.querySelector(`#closeBtn${listObj.id}`).click();
     }
     const changeStatus=(e)=>{
         const taskId=e.target.parentNode.dataset.taskid;
         dispatch(changeTask(taskId));
-    }
-    const removeList=()=>{
-        dispatch(removeList(listId));
     }
     return(
         <section className="list row g-0">
@@ -43,29 +41,32 @@ export default function List({listObj}){
                 <h2 className="d-inline">{listObj.name}</h2>
             </article>
             <article className="listHeader col-4 text-end p-2">
-                <span className="removeList" onClick={removeList}><BsTrashFill /></span>
+                <span className="removeList" onClick={()=>{console.log(listId);dispatch(removeList(listId))}}><BsTrashFill /></span>
             </article>
-            <article classNmae="col-12 tasksDiv">
-                <button type="button" className="customBtn ms-2" data-bs-toggle="modal" data-bs-target={`#addTaskModal${listObj.id}`}>+</button>
-                <span className="ms-4 taskText">Add task</span>
-            </article>
+            <hr/>
+            <ul>
+                <li>
+                    <button type="button" className="customBtn ms-2" data-bs-toggle="modal" data-bs-target={`#addTaskModal${listObj.id}`}>+</button>
+                    <span className="ms-4 taskText">Add task</span>
+                </li>
+            
             {/* Print all unfinished tasks */}
-            {unfinishedTasks.map(task=><article classNmae="col-12 tasksDiv">
+            {unfinishedTasks.map(task=><li key={task.id}>
                 <button type="button" className="unfinishTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
-                <span className="ms-4 taskText" data-bs-toggle="modal" data-bs-target="#changeTaskModal" onClick={(e)=>{
-                    const changeid=e.target.parentElement.previousElementSibling.dataset.taskid;
-                    changeTaskId=changeid;
-                    console.log(changeTaskId);
-                }}>{task.task} <BsPen /></span>
-            </article>)}
+                <p className="ms-4 taskText" data-bs-toggle="modal" data-bs-target="#changeTaskModal">{task.task}</p>
+               
+            </li>)}
             {/* Print all finished tasks */}
-            <article className="listHeader col-12">
+            <li className="listHeader p-2">
                 {finishedTasks.length ? <h2 className="d-inline text-success">Completed ({finishedTasks.length})</h2> : ""}
-            </article>
-            {finishedTasks.map(task=><article classNmae="col-12 tasksDiv">
+            </li>
+            {finishedTasks.map(task=><li key={task.id}>
                 <button type="button" className="finishedTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
                 <span className="ms-4 taskText">{task.task}</span>
-            </article>)}
+            </li>)}
+            {/* Print important tasks */}
+
+            </ul>
             {/* Add task modal */}
             <article className="modal fade" id={`addTaskModal${listObj.id}`} data-bs-backdrop="static" data-bs-keyboard="false" tabzndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <section className="modal-dialog">
@@ -79,31 +80,14 @@ export default function List({listObj}){
                         <input tpye="text" className="form-control mt-2" id={`taskName${listObj.id}`} />
                     </section>
                     <section className="modal-footer">
-                        <button type="button" className="btn btn-secondary closeModalBtn" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-secondary" id={`closeBtn${listObj.id}`} data-bs-dismiss="modal">Close</button>
                         <button type="button" className="btn btn-primary" onClick={clickAdd}>Add task</button>
                     </section>
                     </article>
                 </section>
             </article>
             {/* Change task modal */}
-                <article className="modal fade" id="changeTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabzndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <section className="modal-dialog">
-                        <article className="modal-content">
-                            <section className="modal-header">
-                                <h5 className="modal-title" id="staticBackdropLabel">Add new task</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </section>
-                            <section className="modal-body">
-                                <label>Name</label>
-                                <input tpye="text" className="form-control" id="taskName" />
-                            </section>
-                            <section className="modal-footer">
-                                <button type="button" className="btn btn-secondary closeModalBtn" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary">Add task</button>
-                            </section>
-                        </article>
-                    </section>
-                </article>
+               
         </section>
         
     )

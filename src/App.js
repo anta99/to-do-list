@@ -18,7 +18,8 @@ function App() {
       name:input
     }
     dispatch(addList(listObj));
-    document.querySelector(".closeModalBtn").click();
+    document.querySelector("#listName").value="";
+    document.querySelector("#addListBtn").click();
   }
   const listsState=useSelector(state=>state.list);
   return (
@@ -40,7 +41,7 @@ function App() {
                   <input tpye="text" className="form-control" id="listName" />
               </section>
               <section className="modal-footer">
-                  <button type="button" className="btn btn-secondary closeModalBtn" data-bs-dismiss="modal">Close</button>
+                  <button type="button" className="btn btn-secondary" id="addListBtn" data-bs-dismiss="modal">Close</button>
                   <button type="button" className="btn btn-primary" onClick={addListHandler}>Add list</button>
               </section>
               </article>
