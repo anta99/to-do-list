@@ -1,0 +1,31 @@
+*{
+  margin:0px;
+  padding:0px;
+  box-sizing: border-box;
+}
+.row {
+	--bs-gutter-x:0rem;
+}
+body{
+  line-height: normal;
+}
+.customBtn{
+  background-color: #1c437e;
+  border-radius: 50%;
+  color:#fff;
+  border: none;
+  margin:10px 0px;
+  width:50px;
+  height: 50px;
+  font-size:30px;
+  font-weight: 900;
+}
+.customBtnMain{
+  @extend .customBtn;
+  width:70px;
+  height:70px;
+  font-size:40px;
+  position: fixed;
+  right:10px;
+  bottom:10px;
+}

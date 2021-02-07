@@ -1,0 +1,38 @@
+.list{
+    border:2px solid #1c437e;
+    margin:20px 0px;
+}
+.listHeader h2{
+    font-size: 20px;
+}
+.listSettings{
+    font-size: 25px;
+}
+.taskText{
+    font-size:20px;
+    vertical-align: text-top;
+}
+.unfinishTaskBtn{
+    background-color: #fff;
+    border-radius: 50%;
+    color:#fff;
+    border: 2px solid #1c437e;
+    margin:10px 0px;
+    width:50px;
+    height: 50px;
+    font-size:30px;
+    font-weight: 900;
+}
+.finishedTaskBtn{
+    border-radius: 50%;
+    color:green;
+    border: 1px solid green;
+    margin:10px 0px;
+    width:50px;
+    height: 50px;
+    font-size:30px;
+    font-weight: 900;
+}
+.removeList{
+    cursor: pointer;
+}

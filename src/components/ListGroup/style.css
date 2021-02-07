@@ -1,0 +1,22 @@
+.listContainer {
+  width: 20%;
+}
+
+@media screen and (max-width: 1250px) {
+  .listContainer {
+    width: 35%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .listContainer {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .listContainer {
+    width: 100%;
+  }
+}
+/*# sourceMappingURL=style.css.map */
