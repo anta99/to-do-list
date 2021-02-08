@@ -1,37 +1,52 @@
 import React,{useState,useEffect} from "react";
 import {addTask,changeTask,removeList,markTask,deleteTask} from "../../actions/index";
+import {useSelector,useDispatch} from "react-redux";
 import bootstrap from 'bootstrap'
 import {BsTrashFill,BsCheck,BsThreeDotsVertical} from "react-icons/bs";
-import {useSelector,useDispatch} from "react-redux";
+
 import "./style.css";
+import Taskdesc from "../Taskdesc/Taskdesc";
 
 
 export default function List({listObj}){
     const [listId,setListId]=useState(null);
+    const [changeComp,setChangeComp]=useState(false);
+    const [changeid,setChangeid]=useState(null);
     const tasksState=useSelector(state=>state.task);
     const importantTasks=tasksState.filter(task=>task.important && task.listId==listId);
     const importantTasksIds=importantTasks.map(task=>task.id);
     const unfinishedTasks=tasksState.filter(task=>!task.finished && task.listId==listId && !importantTasksIds.includes(task.id));
     const finishedTasks=tasksState.filter(task=>task.finished && task.listId==listId && !importantTasksIds.includes(task.id));
-    
     const tasksLength=tasksState.length;
     const dispatch=useDispatch();
 
     useEffect(()=>{
         setListId(listObj.id);
     },[])
+    const openChangeComp=(e)=>{
+        if(!changeComp){
+            const changeId=e.target.dataset.id;
+            setChangeid(changeId);
+        }
+        setChangeComp(!changeComp);
+    }
+
     const clickAdd=()=>{
         const input=document.querySelector(`#taskName${listObj.id}`);
-        const taskObj={
-            id:tasksLength,
-            listId:listId,
-            task:input.value,
-            finished:false,
-            important:false
+        if(input.value!=""){
+            const taskObj={
+                id:tasksLength,
+                listId:listId,
+                task:input.value,
+                finished:false,
+                important:false,
+                desc:"",
+                date:""
+            }
+            dispatch(addTask(taskObj));
+            document.querySelector(`#taskName${listObj.id}`).value="";
+            document.querySelector(`#closeBtn${listObj.id}`).click();
         }
-        dispatch(addTask(taskObj));
-        document.querySelector(`#taskName${listObj.id}`).value="";
-        document.querySelector(`#closeBtn${listObj.id}`).click();
     }
     const changeStatus=(e)=>{
         const taskId=e.target.parentNode.dataset.taskid;
@@ -65,7 +80,7 @@ export default function List({listObj}){
             {/* Print all unfinished tasks */}
             {unfinishedTasks.map(task=><li key={task.id}>
                 <button type="button" className="unfinishTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
-                <p className="ms-4 taskText" data-bs-toggle="modal" data-bs-target="#changeTaskModal">{task.task}</p>
+                <p className="ms-4 taskText">{task.task}</p>
                 <div className="dropdown d-inline-block">
                     <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <BsThreeDotsVertical />
@@ -73,6 +88,7 @@ export default function List({listObj}){
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Mark as important</li>
                         <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
+                        <li className="dropdown-item" data-id={task.id} onClick={openChangeComp}>Change task</li>
                     </ul>
                 </div>
             </li>)}
@@ -90,6 +106,7 @@ export default function List({listObj}){
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Unmark as important</li>
                         <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
+                        <li className="dropdown-item" data-id={task.id} onClick={openChangeComp}>Change task</li>
                     </ul>
                 </div>
             </li>)}
@@ -107,6 +124,7 @@ export default function List({listObj}){
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Mark as important</li>
                         <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
+                        <li className="dropdown-item" data-id={task.id} onClick={openChangeComp}>Change task</li>
                     </ul>
                 </div>
             </li>)}
@@ -132,7 +150,7 @@ export default function List({listObj}){
                 </section>
             </article>
             {/* Change task modal */}
-               
+            {changeComp ? <Taskdesc taskId={changeid} closeHandler={openChangeComp} /> : null}
         </section>
         
     )

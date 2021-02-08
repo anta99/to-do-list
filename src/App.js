@@ -4,6 +4,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 import Header from "./components/Header/Header";
 import ListGroup from "./components/ListGroup/ListGroup";
+import Taskdesc from "./components/Taskdesc/Taskdesc";
 import {addList} from "./actions/index";
 import {useSelector,useDispatch} from "react-redux";
 
@@ -27,7 +28,7 @@ function App() {
       <Header />
       <ListGroup lists={listsState} />
       <button type="button" className="customBtnMain" data-bs-toggle="modal" data-bs-target="#addListModal">+</button>
-
+      {/* <Taskdesc /> */}
       {/* Add list modal */}
       <article className="modal fade" id="addListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabzndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <section className="modal-dialog">

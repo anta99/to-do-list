@@ -34,3 +34,9 @@ export const deleteTask=(id)=>{
         payload:id
     }
 }
+export const updateTask=(obj)=>{
+    return{
+        type:"UPDATE_TASK",
+        payload:obj
+    }
+}

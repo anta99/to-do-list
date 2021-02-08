@@ -10,6 +10,12 @@ const tasksReducer=(state=[],action)=>{
             return [...state];
         case "DELETE_TASK":
             return state.filter(task=>task.id!=action.payload);
+        case "UPDATE_TASK":
+            const taskToUpdate=state.find((task)=>task.id==action.payload.id);
+            taskToUpdate.task=action.payload.newName;
+            taskToUpdate.desc=action.payload.desc;
+            taskToUpdate.date=action.payload.date;
+            return [...state];
         default:
             return state;
     }
