@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
-import {addTask,changeTask,removeList} from "../../actions/index";
+import {addTask,changeTask,removeList,markTask,deleteTask} from "../../actions/index";
 import bootstrap from 'bootstrap'
-import {BsTrashFill,BsCheck,BsExclamationCircle} from "react-icons/bs";
+import {BsTrashFill,BsCheck,BsThreeDotsVertical} from "react-icons/bs";
 import {useSelector,useDispatch} from "react-redux";
 import "./style.css";
 
@@ -9,9 +9,11 @@ import "./style.css";
 export default function List({listObj}){
     const [listId,setListId]=useState(null);
     const tasksState=useSelector(state=>state.task);
-    let changeTaskId;
-    const unfinishedTasks=tasksState.filter(task=>!task.finished && task.listId==listId);
-    const finishedTasks=tasksState.filter(task=>task.finished && task.listId==listId);
+    const importantTasks=tasksState.filter(task=>task.important && task.listId==listId);
+    const importantTasksIds=importantTasks.map(task=>task.id);
+    const unfinishedTasks=tasksState.filter(task=>!task.finished && task.listId==listId && !importantTasksIds.includes(task.id));
+    const finishedTasks=tasksState.filter(task=>task.finished && task.listId==listId && !importantTasksIds.includes(task.id));
+    
     const tasksLength=tasksState.length;
     const dispatch=useDispatch();
 
@@ -24,9 +26,9 @@ export default function List({listObj}){
             id:tasksLength,
             listId:listId,
             task:input.value,
-            finished:false
+            finished:false,
+            important:false
         }
-        //console.log(taskObj);
         dispatch(addTask(taskObj));
         document.querySelector(`#taskName${listObj.id}`).value="";
         document.querySelector(`#closeBtn${listObj.id}`).click();
@@ -34,6 +36,16 @@ export default function List({listObj}){
     const changeStatus=(e)=>{
         const taskId=e.target.parentNode.dataset.taskid;
         dispatch(changeTask(taskId));
+    }
+    const markAsImportant=(e)=>{
+        const taskId=e.target.dataset.id;
+        console.log(taskId);
+        dispatch(markTask(taskId));
+    }
+    const deleteTaskHandler=(e)=>{
+        const deleteId=e.target.dataset.id;
+        console.log(deleteId);
+        dispatch(deleteTask(deleteId));
     }
     return(
         <section className="list row g-0">
@@ -54,7 +66,32 @@ export default function List({listObj}){
             {unfinishedTasks.map(task=><li key={task.id}>
                 <button type="button" className="unfinishTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
                 <p className="ms-4 taskText" data-bs-toggle="modal" data-bs-target="#changeTaskModal">{task.task}</p>
-               
+                <div className="dropdown d-inline-block">
+                    <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <BsThreeDotsVertical />
+                    </button>
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Mark as important</li>
+                        <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
+                    </ul>
+                </div>
+            </li>)}
+            {/* Print important tasks */}
+            <li className="listHeader p-2">
+                {importantTasks.length ? <h2 className="d-inline text-warning">Imprtant ({importantTasks.length})</h2> : ""}
+            </li>
+            {importantTasks.map(task=><li key={task.id}>
+                <button type="button" className={`${task.finished ? "finishedTaskBtn" : "unfinishTaskBtn"} ms-2`} data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
+                <p className="ms-4 taskText">{task.task}</p>
+                <div className="dropdown d-inline-block">
+                    <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <BsThreeDotsVertical />
+                    </button>
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Unmark as important</li>
+                        <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
+                    </ul>
+                </div>
             </li>)}
             {/* Print all finished tasks */}
             <li className="listHeader p-2">
@@ -62,10 +99,18 @@ export default function List({listObj}){
             </li>
             {finishedTasks.map(task=><li key={task.id}>
                 <button type="button" className="finishedTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
-                <span className="ms-4 taskText">{task.task}</span>
+                <p className="ms-4 taskText">{task.task}</p>
+                <div className="dropdown d-inline-block">
+                    <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <BsThreeDotsVertical />
+                    </button>
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Mark as important</li>
+                        <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
+                    </ul>
+                </div>
             </li>)}
-            {/* Print important tasks */}
-
+            
             </ul>
             {/* Add task modal */}
             <article className="modal fade" id={`addTaskModal${listObj.id}`} data-bs-backdrop="static" data-bs-keyboard="false" tabzndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

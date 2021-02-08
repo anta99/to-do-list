@@ -53,3 +53,25 @@
 .removeTask{
     text-align: right;
 }
+.dropdown-toggle{
+    vertical-align: super;
+    &:focus{
+        box-shadow: none;
+    }
+    &::after{
+        display: none;
+    }
+	
+}
+#dropdownMenuButton{
+    font-size: 25px;
+    color:#1c437e;
+    text-align: right;
+}
+.dropdown-item{
+    cursor: pointer;
+    &:hover{
+        background-color: #1c437e;
+        color:#fff;
+    }
+}

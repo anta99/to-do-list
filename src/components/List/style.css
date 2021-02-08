@@ -60,4 +60,32 @@
 .removeTask {
   text-align: right;
 }
+
+.dropdown-toggle {
+  vertical-align: super;
+}
+
+.dropdown-toggle:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+#dropdownMenuButton {
+  font-size: 25px;
+  color: #1c437e;
+  text-align: right;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #1c437e;
+  color: #fff;
+}
 /*# sourceMappingURL=style.css.map */

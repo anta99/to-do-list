@@ -37,7 +37,7 @@ function App() {
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </section>
               <section className="modal-body">
-                  <label>Name</label>
+                  <label>List name</label>
                   <input tpye="text" className="form-control" id="listName" />
               </section>
               <section className="modal-footer">

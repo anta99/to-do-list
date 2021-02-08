@@ -22,3 +22,15 @@ export const removeList=(id)=>{
         payload:id
     }
 }
+export const markTask=(id)=>{
+    return{
+        type:"MARK_TASK",
+        payload:id
+    }
+}
+export const deleteTask=(id)=>{
+    return{
+        type:"DELETE_TASK",
+        payload:id
+    }
+}
