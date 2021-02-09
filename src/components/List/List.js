@@ -1,17 +1,14 @@
 import React,{useState,useEffect} from "react";
-import {addTask,changeTask,removeList,markTask,deleteTask} from "../../actions/index";
+import {addTask,removeList} from "../../actions/index";
 import {useSelector,useDispatch} from "react-redux";
 import bootstrap from 'bootstrap'
-import {BsTrashFill,BsCheck,BsThreeDotsVertical} from "react-icons/bs";
-
+import {BsTrashFill} from "react-icons/bs";
 import "./style.css";
-import Taskdesc from "../Taskdesc/Taskdesc";
+import Task from "../Task/Task";
 
 
 export default function List({listObj}){
     const [listId,setListId]=useState(null);
-    const [changeComp,setChangeComp]=useState(false);
-    const [changeid,setChangeid]=useState(null);
     const tasksState=useSelector(state=>state.task);
     const importantTasks=tasksState.filter(task=>task.important && task.listId==listId);
     const importantTasksIds=importantTasks.map(task=>task.id);
@@ -23,13 +20,7 @@ export default function List({listObj}){
     useEffect(()=>{
         setListId(listObj.id);
     },[])
-    const openChangeComp=(e)=>{
-        if(!changeComp){
-            const changeId=e.target.dataset.id;
-            setChangeid(changeId);
-        }
-        setChangeComp(!changeComp);
-    }
+    
 
     const clickAdd=()=>{
         const input=document.querySelector(`#taskName${listObj.id}`);
@@ -48,20 +39,6 @@ export default function List({listObj}){
             document.querySelector(`#closeBtn${listObj.id}`).click();
         }
     }
-    const changeStatus=(e)=>{
-        const taskId=e.target.parentNode.dataset.taskid;
-        dispatch(changeTask(taskId));
-    }
-    const markAsImportant=(e)=>{
-        const taskId=e.target.dataset.id;
-        console.log(taskId);
-        dispatch(markTask(taskId));
-    }
-    const deleteTaskHandler=(e)=>{
-        const deleteId=e.target.dataset.id;
-        console.log(deleteId);
-        dispatch(deleteTask(deleteId));
-    }
     return(
         <section className="list row g-0">
             <article className="listHeader col-8 p-2">
@@ -79,54 +56,21 @@ export default function List({listObj}){
             
             {/* Print all unfinished tasks */}
             {unfinishedTasks.map(task=><li key={task.id}>
-                <button type="button" className="unfinishTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
-                <p className="ms-4 taskText">{task.task}</p>
-                <div className="dropdown d-inline-block">
-                    <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <BsThreeDotsVertical />
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Mark as important</li>
-                        <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
-                        <li className="dropdown-item" data-id={task.id} onClick={openChangeComp}>Change task</li>
-                    </ul>
-                </div>
+                <Task taskObj={task}/>
             </li>)}
             {/* Print important tasks */}
             <li className="listHeader p-2">
-                {importantTasks.length ? <h2 className="d-inline text-warning">Imprtant ({importantTasks.length})</h2> : ""}
+                {importantTasks.length ? <h2 className="d-inline text-warning">Important ({importantTasks.length})</h2> : ""}
             </li>
             {importantTasks.map(task=><li key={task.id}>
-                <button type="button" className={`${task.finished ? "finishedTaskBtn" : "unfinishTaskBtn"} ms-2`} data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
-                <p className="ms-4 taskText">{task.task}</p>
-                <div className="dropdown d-inline-block">
-                    <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <BsThreeDotsVertical />
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Unmark as important</li>
-                        <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
-                        <li className="dropdown-item" data-id={task.id} onClick={openChangeComp}>Change task</li>
-                    </ul>
-                </div>
+                <Task taskObj={task}/>
             </li>)}
             {/* Print all finished tasks */}
             <li className="listHeader p-2">
                 {finishedTasks.length ? <h2 className="d-inline text-success">Completed ({finishedTasks.length})</h2> : ""}
             </li>
             {finishedTasks.map(task=><li key={task.id}>
-                <button type="button" className="finishedTaskBtn ms-2" data-taskid={task.id} onClick={changeStatus}><BsCheck /></button>
-                <p className="ms-4 taskText">{task.task}</p>
-                <div className="dropdown d-inline-block">
-                    <button className="btn dropdown-toggle d-inline" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <BsThreeDotsVertical />
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li className="dropdown-item" data-id={task.id} onClick={markAsImportant}>Mark as important</li>
-                        <li className="dropdown-item" data-id={task.id} onClick={deleteTaskHandler}>Delete task</li>
-                        <li className="dropdown-item" data-id={task.id} onClick={openChangeComp}>Change task</li>
-                    </ul>
-                </div>
+                <Task taskObj={task}/>
             </li>)}
             
             </ul>
@@ -149,8 +93,6 @@ export default function List({listObj}){
                     </article>
                 </section>
             </article>
-            {/* Change task modal */}
-            {changeComp ? <Taskdesc taskId={changeid} closeHandler={openChangeComp} /> : null}
         </section>
         
     )

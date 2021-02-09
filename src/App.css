@@ -17,6 +17,10 @@ body {
   line-height: normal;
 }
 
+button:focus {
+  outline: none;
+}
+
 .customBtn, .customBtnMain {
   background-color: #1c437e;
   border-radius: 50%;
