@@ -14,19 +14,17 @@ export default function List({listObj}){
     const importantTasksIds=importantTasks.map(task=>task.id);
     const unfinishedTasks=tasksState.filter(task=>!task.finished && task.listId==listId && !importantTasksIds.includes(task.id));
     const finishedTasks=tasksState.filter(task=>task.finished && task.listId==listId && !importantTasksIds.includes(task.id));
-    const tasksLength=tasksState.length;
     const dispatch=useDispatch();
-
+    const taskId=tasksState.length ? tasksState[tasksState.length-1].id+1 : 0;
     useEffect(()=>{
         setListId(listObj.id);
     },[])
-    
-
     const clickAdd=()=>{
         const input=document.querySelector(`#taskName${listObj.id}`);
+        
         if(input.value!=""){
             const taskObj={
-                id:tasksLength,
+                id:taskId,
                 listId:listId,
                 task:input.value,
                 finished:false,
