@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import {addTask,removeList} from "../../actions/index";
+import {addTask,removeList,cascadeDelteTasks} from "../../actions/index";
 import {useSelector,useDispatch} from "react-redux";
 import bootstrap from 'bootstrap'
 import {BsTrashFill} from "react-icons/bs";
@@ -21,7 +21,6 @@ export default function List({listObj}){
     },[])
     const clickAdd=()=>{
         const input=document.querySelector(`#taskName${listObj.id}`);
-        
         if(input.value!=""){
             const taskObj={
                 id:taskId,
@@ -35,6 +34,8 @@ export default function List({listObj}){
             dispatch(addTask(taskObj));
             document.querySelector(`#taskName${listObj.id}`).value="";
             document.querySelector(`#closeBtn${listObj.id}`).click();
+
+            //addToLS("task");
         }
     }
     return(
@@ -43,7 +44,10 @@ export default function List({listObj}){
                 <h2 className="d-inline">{listObj.name}</h2>
             </article>
             <article className="listHeader col-4 text-end p-2">
-                <span className="removeList" onClick={()=>{console.log(listId);dispatch(removeList(listId))}}><BsTrashFill /></span>
+                <span className="removeList" onClick={()=>{
+                    dispatch(removeList(listId));
+                    dispatch(cascadeDelteTasks(listId))}
+                    }><BsTrashFill /></span>
             </article>
             <hr/>
             <ul>

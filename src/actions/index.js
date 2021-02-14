@@ -1,4 +1,5 @@
 export const addTask=(task)=>{
+    
     return{
         type:"ADD_TASK",
         payload:task
@@ -23,6 +24,7 @@ export const removeList=(id)=>{
     }
 }
 export const markTask=(id)=>{
+
     return{
         type:"MARK_TASK",
         payload:id
@@ -38,5 +40,11 @@ export const updateTask=(obj)=>{
     return{
         type:"UPDATE_TASK",
         payload:obj
+    }
+}
+export const cascadeDelteTasks=(listId)=>{
+    return{
+        type:"CASCADE_DELETE",
+        payload:listId
     }
 }

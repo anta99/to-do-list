@@ -16,6 +16,8 @@ const tasksReducer=(state=[],action)=>{
             taskToUpdate.desc=action.payload.desc;
             taskToUpdate.date=action.payload.date;
             return [...state];
+        case "CASCADE_DELETE":
+            return state.filter(task=>task.listId!=action.payload);
         default:
             return state;
     }

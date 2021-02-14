@@ -3,7 +3,7 @@ const listsReducer=(state=[],action)=>{
         case "ADD_LIST":
             return [...state,action.payload];
         case "REMOVE_LIST":
-            return state.filter((list,index)=>index!=action.payload);
+            return state.filter(list=>list.id!=action.payload);
         default:
             return state;
     }

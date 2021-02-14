@@ -1,34 +1,35 @@
 import React,{useEffect} from "react";
-import logo from './logo.svg';
+import {useSelector,useDispatch} from "react-redux";
+
+
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 import Header from "./components/Header/Header";
 import ListGroup from "./components/ListGroup/ListGroup";
-import Taskdesc from "./components/Taskdesc/Taskdesc";
 import {addList} from "./actions/index";
-import {useSelector,useDispatch} from "react-redux";
+
 
 
 function App() {
+  var listState=useSelector(state=>state.list);
   const dispatch=useDispatch();
-  const listStateLength=useSelector(state=>state.list).length;
+  const listId=listState.length ? listState[listState.length-1].id+1 : 0;
   const addListHandler=()=>{
     const input=document.querySelector("#listName").value;
     const listObj={
-      id:listStateLength,
+      id:listId,
       name:input
     }
     dispatch(addList(listObj));
     document.querySelector("#listName").value="";
     document.querySelector("#addListBtn").click();
   }
-  const listsState=useSelector(state=>state.list);
+  
   return (
     <main className="App">
       <Header />
-      <ListGroup lists={listsState} />
+      <ListGroup lists={listState} />
       <button type="button" className="customBtnMain" data-bs-toggle="modal" data-bs-target="#addListModal">+</button>
-      {/* <Taskdesc /> */}
       {/* Add list modal */}
       <article className="modal fade" id="addListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabzndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <section className="modal-dialog">
